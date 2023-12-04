@@ -16,6 +16,11 @@ export default function AdminSidebar() {
                     </LinkContainer>
                 </Nav.Item>
                 <Nav.Item>
+                    <LinkContainer to={"/admin/tags"}>
+                        <Nav.Link>Tags</Nav.Link>
+                    </LinkContainer>
+                </Nav.Item>
+                <Nav.Item>
                     <LinkContainer to={"/"}>
                         <Nav.Link>Profile</Nav.Link>
                     </LinkContainer>
