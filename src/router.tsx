@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import AdminPostsPage from "./pages/AdminPostsPage";
 import AdminPostPage from "./pages/AdminPostPage";
 import AdminTagsPage from "./pages/AdminTagsPage";
+import AdminFilesPage from "./pages/AdminFilesPage";
 
 const router = createBrowserRouter([
     {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
             {
                 path: 'tags',
                 element: <AdminTagsPage/>
+            },
+            {
+                path: 'files',
+                element: <AdminFilesPage/>
             }
         ]
     },

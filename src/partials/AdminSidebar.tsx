@@ -21,6 +21,11 @@ export default function AdminSidebar() {
                     </LinkContainer>
                 </Nav.Item>
                 <Nav.Item>
+                    <LinkContainer to={"/admin/files"}>
+                        <Nav.Link>Files</Nav.Link>
+                    </LinkContainer>
+                </Nav.Item>
+                <Nav.Item>
                     <LinkContainer to={"/"}>
                         <Nav.Link>Profile</Nav.Link>
                     </LinkContainer>
