@@ -1,10 +1,12 @@
 import { Form } from "react-bootstrap";
 import FormModal from "./FormModal";
 import { PropsWithChildren, useEffect, useState } from "react";
-import Tag from "../entities/Tag";
+import ITag from "@/entities/Tag";
+
+
 
 export default function TagEditModal(props: PropsWithChildren<{
-    tag?: Tag;
+    tag?: ITag;
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }>) {

@@ -17,4 +17,11 @@ export default class LocalFilesQuery {
         }
         throw res.data;
     }
+
+    public static async deleteFile(id: string) {
+        const res = await axios.delete(`${import.meta.env.VITE_API_URL}/local-files/${id}`);
+        if (res.status != 200) {
+            throw res.data;
+        }
+    }
 }
