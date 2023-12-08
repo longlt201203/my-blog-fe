@@ -29,7 +29,9 @@ export default function UploadFileModal(props: PropsWithChildren<{
     }
 
     return (
-        <FormModal title="Upload Image" show={props.show} setShow={props.setShow} onSave={handleSubmit} >
+        <FormModal title="Upload Image" show={props.show} setShow={props.setShow} onSave={handleSubmit} onClose={() => {
+            setData(undefined);
+        }}>
             <Form.Group>
                 <Form.Label>Files</Form.Label>
                 <Form.Control type="file" accept="image/*" onChange={onFilesChange} />

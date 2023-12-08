@@ -5,7 +5,9 @@ export default function FormModal(props: PropsWithChildren<{
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
     title?: string;
-    onSave?: React.MouseEventHandler<HTMLButtonElement>
+    onSave?: () => void,
+    onClose?: () => void,
+    onSubmit?: React.FormEventHandler<HTMLFormElement>
 }>) {
     return (
         <Modal show={props.show}>
@@ -13,13 +15,25 @@ export default function FormModal(props: PropsWithChildren<{
                 <Modal.Title>{props.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form onSubmit={(e) => {
+                    e.preventDefault();
+                    if (props.onSubmit) {
+                        props.onSubmit(e);
+                    } else if (props.onSave) {
+                        props.onSave();
+                    }
+                }}>
                     {props.children}
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onSave}>Save</Button>
-                <Button onClick={() => props.setShow(false)} variant="danger">Cancel</Button>
+                <Button onClick={(e) => {
+                    if (props.onClose) {
+                        props.onClose();
+                    }
+                    props.setShow(false);
+                }} variant="danger">Cancel</Button>
             </Modal.Footer>
         </Modal>
     );

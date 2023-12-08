@@ -3,3 +3,7 @@ export default interface LocalFile {
     aliasName: string;
     link?: string;
 }
+
+export interface UpdateLocalFileDto {
+    aliasName: string;
+}

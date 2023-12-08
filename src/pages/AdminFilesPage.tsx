@@ -1,31 +1,40 @@
 import { Button, ButtonGroup, Card, Col, Row, Spinner, Stack } from "react-bootstrap";
 import AdminLayout from "../layouts/AdminLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UploadFileModal from "../components/UploadFileModal";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import LocalFile from "@/entities/LocalFile";
+import LocalFile, { UpdateLocalFileDto } from "@/entities/LocalFile";
 import LocalFilesQuery from "../queries/LocalFilesQuery";
 import { ToastContainer, toast } from "react-toastify";
 import ConfirmModal from "../components/ConfirmModal";
+import EditFileModal from "../components/EditfileModal";
 
 export default function AdminFilesPage() {
     const [handleYes, setHandleYes] = useState(() => () => { });
     const [confirmModalShow, setConfirmModalShow] = useState(false);
     const [modalShow, setModalShow] = useState(false);
+    const [editModalShow, setEditModalShow] = useState(false);
+    const [editLocalFileId, setEditLocalFileId] = useState<string | undefined>();
     const { status, data, error } = useQuery<LocalFile[], Error>("getFiles", LocalFilesQuery.getLocalFiles);
     const queryClient = useQueryClient();
-    const uploadFileMutation = useMutation(LocalFilesQuery.uploadFiles, {
+    const uploadFileMutation = useMutation("uploadFiles", LocalFilesQuery.uploadFiles, {
         onSuccess: () => {
             queryClient.invalidateQueries("getFiles");
             toast('Upload success');
         }
     });
-    const deleteFileMutation = useMutation(LocalFilesQuery.deleteFile, {
+    const editFileInfoMutation = useMutation("editFileInfo", LocalFilesQuery.editFileInfo, {
+        onSuccess: () => {
+            queryClient.invalidateQueries("getFiles");
+            toast('Edit success');
+        }
+    });
+    const deleteFileMutation = useMutation("deleteFile", LocalFilesQuery.deleteFile, {
         onSuccess: () => {
             queryClient.invalidateQueries("getFiles");
             toast('Delete success');
         }
-    })
+    });
 
     function handleSubmit(submitData: FormData) {
         uploadFileMutation.mutate(submitData);
@@ -33,6 +42,10 @@ export default function AdminFilesPage() {
 
     function handleDeleteFile(id: string) {
         deleteFileMutation.mutate(id);
+    }
+
+    function handleEditFileInfo(id: string, dto: UpdateLocalFileDto) {
+        editFileInfoMutation.mutate({id, dto});
     }
 
     return (
@@ -64,7 +77,10 @@ export default function AdminFilesPage() {
                                     <Stack className="justify-content-between" gap={2}>
                                         <Card.Title className="text-center">{item.aliasName}</Card.Title>
                                         <ButtonGroup>
-                                            <Button variant="secondary">
+                                            <Button variant="secondary" onClick={() => {
+                                                setEditLocalFileId(item._id);
+                                                setEditModalShow(true);
+                                            }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-fill" viewBox="0 0 16 16">
                                                     <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
                                                 </svg>
@@ -91,6 +107,7 @@ export default function AdminFilesPage() {
                 <>{toast("Error")}</>
             )}
             <UploadFileModal handleSubmit={handleSubmit} show={modalShow} setShow={setModalShow} />
+            <EditFileModal localFileId={editLocalFileId} handleSubmit={handleEditFileInfo} show={editModalShow} setShow={setEditModalShow} />
             <ConfirmModal handleYes={handleYes} handleCancel={() => setConfirmModalShow(false)} show={confirmModalShow} text="Are you sure?" />
         </AdminLayout>
     );
