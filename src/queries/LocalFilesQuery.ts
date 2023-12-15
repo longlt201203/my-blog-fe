@@ -1,9 +1,10 @@
 import axios from "axios";
 import LocalFile, { UpdateLocalFileDto } from "../entities/LocalFile";
+import GetManyDto from "@/entities/GetManyDto";
 
 export default class LocalFilesQuery {
-    public static async getLocalFiles() {
-        const res = await axios.get<LocalFile[]>(`${import.meta.env.VITE_API_URL}/local-files/`);
+    public static async getLocalFiles(page: number): Promise<GetManyDto<LocalFile>> {
+        const res = await axios.get<GetManyDto<LocalFile>>(`${import.meta.env.VITE_API_URL}/local-files/?page=${page}`);
         if (res.status == 200) {
             return res.data;
         }

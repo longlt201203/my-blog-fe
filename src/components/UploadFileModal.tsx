@@ -13,8 +13,7 @@ export default function UploadFileModal(props: PropsWithChildren<{
         if (e.target.files) {
             const formData = new FormData();
             for (const f of e.target.files) {
-                const blob = new Blob([f], { type: f.type });
-                formData.append("files", blob);
+                formData.append("files", f);
             }
             setData(formData);
         }
@@ -34,7 +33,7 @@ export default function UploadFileModal(props: PropsWithChildren<{
         }}>
             <Form.Group>
                 <Form.Label>Files</Form.Label>
-                <Form.Control type="file" accept="image/*" onChange={onFilesChange} />
+                <Form.Control type="file" multiple accept="image/*" onChange={onFilesChange} />
             </Form.Group>
         </FormModal>
     );
